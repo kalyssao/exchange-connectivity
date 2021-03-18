@@ -18,10 +18,10 @@ public class ExchangeConnectivityApplication implements CommandLineRunner {
 	@Override
 	public void run(String ...arg0)throws Exception{
 		MockTradeEngine mockTradeEngine = new MockTradeEngine();
-		mockTradeEngine.produce();
 		OrderConsumer orderConsumer = new OrderConsumer();
+
+		mockTradeEngine.produce();
 		orderConsumer.consumeOrder();
-		mockTradeEngine.consume();
 	}
 
 }
