@@ -23,9 +23,7 @@ public class ExchangeService {
 
         RestTemplate restTemplate = new RestTemplate();
 
-        // TO DO: replace null in request with order
         String result = restTemplate.postForObject(API_URL + "/" + privateKey + "/order", exchangeOrder, String.class);
-
         return result;
     }
 
