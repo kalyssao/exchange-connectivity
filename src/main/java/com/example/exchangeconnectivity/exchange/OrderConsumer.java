@@ -10,10 +10,10 @@ public class OrderConsumer {
     public void consumeOrder() throws JsonProcessingException {
          Jedis jedis = new Jedis("localhost", 8083, 1800);
          Jedis jedis1 = new Jedis("localhost", 8083, 1800);
-         List<String> orders = null;
+         List<String> orders;
 
          while(true){
-             System.out.println("waiting for message");
+             System.out.println("waiting for incoming order");
              orders = jedis.blpop(0, "incoming-orders");
              String order = orders.get(1);
 
@@ -22,17 +22,24 @@ public class OrderConsumer {
 
              ExchangeService exchangeService = new ExchangeService();
              String orderId = exchangeService.confirmOrderWithExchange(exchangeOrder);
-             System.out.println(orderId);
+             System.out.println("api response "+ orderId);
 
+             // updated order with string from exchange
              ExchangeOrder outgoingOrder = new ExchangeOrder(orderId,
                      exchangeOrder.getProduct(), exchangeOrder.getQuantity(),
                      exchangeOrder.getPrice(), exchangeOrder.getSide(), exchangeOrder.getExchange());
              System.out.println(outgoingOrder);
 
-             String outgoingOrderJson = mapper.writeValueAsString(outgoingOrder);
-             System.out.println(outgoingOrderJson);
-             jedis1.rpush("outgoing-orders", outgoingOrderJson);
-             System.out.println("sending to outgoing queue");
+             // not seeing id in this json object
+             // String outgoingOrderJson = mapper.writeValueAsString(outgoingOrder);
+             // System.out.println(outgoingOrderJson);
+
+             // persist to database through rest call
+             ExchangeOrderService exchangeOrderService = new ExchangeOrderService();
+             exchangeOrderService.persistToDb(outgoingOrder);
+
+             // need to figure out where persisting will occur
+             //jedis.rpush("outgoing-orders", outgoingOrderJson);
 
          }
     }
