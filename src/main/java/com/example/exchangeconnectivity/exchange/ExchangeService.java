@@ -7,7 +7,6 @@ import org.springframework.web.client.RestTemplate;
 public class ExchangeService {
 
     public String confirmOrderWithExchange(ExchangeOrder exchangeOrder){
-        System.out.println(exchangeOrder);
         final String API_URL;
         final String privateKey = "6b055a2f-c488-4386-83b8-e9f30c773d35";
 
@@ -22,6 +21,7 @@ public class ExchangeService {
         }
 
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new ExchangeOrderServiceErrorHandler());
 
         String result = restTemplate.postForObject(API_URL + "/" + privateKey + "/order", exchangeOrder, String.class);
         return result;
