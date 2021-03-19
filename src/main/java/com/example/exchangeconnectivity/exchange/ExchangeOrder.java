@@ -10,14 +10,15 @@ public class ExchangeOrder {
     private Double price;
     private String side;
     private Integer exchange;
+    private String status;
 
     public ExchangeOrder() {}
 
     // Receiving from trade engine
     public ExchangeOrder(String product, Integer quantity, Double price, String side, Integer exchange) {
         this.product = product;
-        this.quantity = quantity;
         this.price = price;
+        this.quantity = quantity;
         this.side = side;
         this.exchange = exchange;
     }
@@ -60,12 +61,24 @@ public class ExchangeOrder {
         return exchange;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public void setQuantity(Integer newQuantity){
         this.quantity = newQuantity;
     }
 
     public void setPrice(Double newPrice){
         this.price = newPrice;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setId(String newId){
+        this.id = newId;
     }
 
     @Override
