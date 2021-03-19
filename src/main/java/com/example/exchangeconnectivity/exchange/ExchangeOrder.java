@@ -3,6 +3,8 @@ package com.example.exchangeconnectivity.exchange;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.sql.Timestamp;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExchangeOrder {
     @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -18,8 +20,11 @@ public class ExchangeOrder {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private long clientOrderId;
+    private Timestamp createdAt;
 
-    ExchangeOrder(){}
+    public ExchangeOrder(){
+
+    }
 
     // Sending to exchange
     public ExchangeOrder(String product, Integer quantity, Double price, String side, Integer exchange) {
@@ -82,20 +87,24 @@ public class ExchangeOrder {
         this.status = status;
     }
 
-    public void setId(String newId){
-        this.exchangeOrderId = newId;
-    }
-
     public void setClientOrderId(long clientOrderId) {
         this.clientOrderId = clientOrderId;
     }
 
     public void setExchange(Integer exchange) { this.exchange = exchange; }
 
+    public void setExchangeOrderId(String exchangeOrderId) {
+        this.exchangeOrderId = exchangeOrderId;
+    }
+
+    public void setCreatedAt() {
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+    }
+
     @Override
     public String toString() {
         return "ExchangeOrder{" +
-                "id='" + exchangeOrderId + '\'' +
+                "exchangeOrderId='" + exchangeOrderId + '\'' +
                 ", product='" + product + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
@@ -103,6 +112,7 @@ public class ExchangeOrder {
                 ", exchange=" + exchange +
                 ", status='" + status + '\'' +
                 ", clientOrderId=" + clientOrderId +
+                ", createdAt=" + createdAt +
                 '}';
     }
 }
