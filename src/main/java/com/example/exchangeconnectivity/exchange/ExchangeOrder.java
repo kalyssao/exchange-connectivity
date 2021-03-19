@@ -1,45 +1,46 @@
 package com.example.exchangeconnectivity.exchange;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExchangeOrder {
-    private String id;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String exchangeOrderId;
     private String product;
     private Integer quantity;
     private Double price;
     private String side;
     private Integer exchange;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String status;
 
-    public ExchangeOrder() {}
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private long clientOrderId;
 
-    // Receiving from trade engine
-    public ExchangeOrder(String product, Integer quantity, Double price, String side, Integer exchange) {
-        this.product = product;
-        this.price = price;
-        this.quantity = quantity;
-        this.side = side;
-        this.exchange = exchange;
-    }
+    ExchangeOrder(){}
 
     // Sending to exchange
-    public ExchangeOrder(String product, Integer quantity, Double price, String side) {
+    public ExchangeOrder(String product, Integer quantity, Double price, String side, Integer exchange) {
         this.product = product;
         this.quantity = quantity;
         this.price = price;
         this.side = side;
+        this.exchange = exchange;
     }
 
-    // Sending back to trading engine for persisting
-    public ExchangeOrder(String id, String product, Integer quantity, Double price, String side, Integer exchange) {
-        this.id = id;
+    // Receiving from trade engine
+    public ExchangeOrder(String product, Integer quantity, Double price, String side, Integer exchange, long clientOrderId ) {
         this.product = product;
-        this.quantity = quantity;
-        this.exchange = exchange;
         this.price = price;
+        this.quantity = quantity;
         this.side = side;
+        this.exchange = exchange;
+        this.clientOrderId = clientOrderId;
     }
+
+
 
     public String getProduct() {
         return product;
@@ -61,6 +62,10 @@ public class ExchangeOrder {
         return exchange;
     }
 
+    public long getClientOrderId() {
+        return clientOrderId;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -78,19 +83,26 @@ public class ExchangeOrder {
     }
 
     public void setId(String newId){
-        this.id = newId;
+        this.exchangeOrderId = newId;
     }
+
+    public void setClientOrderId(long clientOrderId) {
+        this.clientOrderId = clientOrderId;
+    }
+
+    public void setExchange(Integer exchange) { this.exchange = exchange; }
 
     @Override
     public String toString() {
         return "ExchangeOrder{" +
-                "id='" + id + '\'' +
+                "id='" + exchangeOrderId + '\'' +
                 ", product='" + product + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
                 ", side='" + side + '\'' +
                 ", exchange=" + exchange +
+                ", status='" + status + '\'' +
+                ", clientOrderId=" + clientOrderId +
                 '}';
     }
-
 }
