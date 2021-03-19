@@ -23,24 +23,20 @@ public class OrderConsumer {
             ObjectMapper mapper = new ObjectMapper();
             ExchangeOrder exchangeOrder = mapper.readValue(order, ExchangeOrder.class);
 
-            System.out.println(exchangeOrder);
-
             ExchangeService exchangeService = new ExchangeService();
             String orderId = exchangeService.confirmOrderWithExchange(exchangeOrder);
 
-            System.out.println(orderId);
-
             String sansQuotes = orderId.replaceAll("^\"|\"$", "");
-            exchangeOrder.setId(sansQuotes);
+            exchangeOrder.setExchangeOrderId(sansQuotes);
+//            exchangeOrder.setExchangeOrderId("testing-123-456");
             exchangeOrder.setStatus("Pending");
+            exchangeOrder.setCreatedAt();
 
-            System.out.println("final exchange order" + exchangeOrder);
-//
-//            System.out.println("persist this" + exchangeOrder);
+            System.out.println(exchangeOrder);
 
             // persist to database through rest call
-//            ExchangeOrderService exchangeOrderService = new ExchangeOrderService();
-//            exchangeOrderService.persistToDb(exchangeOrder);
+            ExchangeOrderService exchangeOrderService = new ExchangeOrderService();
+            exchangeOrderService.persistToDb(exchangeOrder);
 
          }
     }
