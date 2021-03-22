@@ -25,19 +25,16 @@ public class OrderConsumer {
 
             ExchangeService exchangeService = new ExchangeService();
             String orderId = exchangeService.confirmOrderWithExchange(exchangeOrder);
+            orderId = (orderId.subSequence(1, orderId.length() - 1)).toString();
 
-            String sansQuotes = orderId.replaceAll("^\"|\"$", "");
-            exchangeOrder.setExchangeOrderId(sansQuotes);
-//            exchangeOrder.setExchangeOrderId("testing-123-456");
-            exchangeOrder.setStatus("Pending");
-            exchangeOrder.setCreatedAt();
-
-            System.out.println(exchangeOrder);
+             // updated order with string from exchange
+             ExchangeOrder outgoingOrder = new ExchangeOrder(orderId,
+                     exchangeOrder.getProduct(), exchangeOrder.getQuantity(),
+                     exchangeOrder.getPrice(), exchangeOrder.getSide(), exchangeOrder.getExchange(), exchangeOrder.getClientOrderId(),"PENDING");
 
             // persist to database through rest call
             ExchangeOrderService exchangeOrderService = new ExchangeOrderService();
-            exchangeOrderService.persistToDb(exchangeOrder);
-
+            exchangeOrderService.persistToDb(outgoingOrder);
          }
     }
 }
