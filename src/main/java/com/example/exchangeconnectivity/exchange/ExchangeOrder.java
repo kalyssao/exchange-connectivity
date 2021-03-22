@@ -20,7 +20,6 @@ public class ExchangeOrder {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private long clientOrderId;
-    private Timestamp createdAt;
 
     public ExchangeOrder(){
 
@@ -45,6 +44,16 @@ public class ExchangeOrder {
         this.clientOrderId = clientOrderId;
     }
 
+    public ExchangeOrder(String exchangeOrderId, String product, Integer quantity, Double price, String side, Integer exchange, long clientOrderId, String status) {
+        this.exchangeOrderId = exchangeOrderId;
+        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+        this.side = side;
+        this.exchange = exchange;
+        this.clientOrderId = clientOrderId;
+        this.status = status;
+    }
 
 
     public String getProduct() {
@@ -97,10 +106,6 @@ public class ExchangeOrder {
         this.exchangeOrderId = exchangeOrderId;
     }
 
-    public void setCreatedAt() {
-        this.createdAt = new Timestamp(System.currentTimeMillis());
-    }
-
     @Override
     public String toString() {
         return "ExchangeOrder{" +
@@ -110,9 +115,8 @@ public class ExchangeOrder {
                 ", price=" + price +
                 ", side='" + side + '\'' +
                 ", exchange=" + exchange +
-                ", status='" + status + '\'' +
                 ", clientOrderId=" + clientOrderId +
-                ", createdAt=" + createdAt +
+                ", status='" + status + '\'' +
                 '}';
     }
 }
