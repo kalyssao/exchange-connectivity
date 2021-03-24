@@ -29,6 +29,7 @@ public class ExchangeOrderServiceErrorHandler implements ResponseErrorHandler {
             System.out.println("server error");
         } else if (httpResponse.getStatusCode()
                 .series() == HttpStatus.Series.CLIENT_ERROR) {
+            System.out.println(httpResponse.toString());
             System.out.println("client error");
             if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
                 System.out.println("not found");
