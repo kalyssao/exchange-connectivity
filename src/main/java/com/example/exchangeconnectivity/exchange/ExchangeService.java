@@ -21,7 +21,6 @@ public class ExchangeService {
         }
 
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setErrorHandler(new ExchangeOrderServiceErrorHandler());
 
         String result = restTemplate.postForObject(API_URL + "/" + privateKey + "/order", exchangeOrder, String.class);
         return result;
