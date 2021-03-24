@@ -1,6 +1,5 @@
 package com.example.exchangeconnectivity;
 
-import com.example.exchangeconnectivity.exchange.MockTradeEngine;
 import com.example.exchangeconnectivity.exchange.OrderConsumer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,11 +16,13 @@ public class ExchangeConnectivityApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String ...arg0)throws Exception{
-//		MockTradeEngine mockTradeEngine = new MockTradeEngine();
 		OrderConsumer orderConsumer = new OrderConsumer();
 
-//		mockTradeEngine.produce();
-		orderConsumer.consumeOrder();
+		try {
+			orderConsumer.consumeOrder();
+		}catch (Exception e){
+			System.out.println(e);
+		}
 	}
 
 }
