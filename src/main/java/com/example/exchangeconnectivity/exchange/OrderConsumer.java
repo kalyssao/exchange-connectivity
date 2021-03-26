@@ -15,6 +15,7 @@ public class OrderConsumer {
     private List<String> orders;
 
     public void consumeOrder() throws Exception {
+        ExchangeOrderService exchangeOrderService = new ExchangeOrderService();
         jedis.auth("rLAKmB4fpXsRZEv9eJBkbddhTYc1RWtK");
         jedis1.auth("rLAKmB4fpXsRZEv9eJBkbddhTYc1RWtK");
 
@@ -32,10 +33,19 @@ public class OrderConsumer {
             try {
                 orderId = exchangeService.confirmOrderWithExchange(exchangeOrder);
             } catch (Exception e) {
-                // tell the reporting service that exchange said no
+
+                // tells the reporting service that exchange said no
                 System.out.println("exchange rejected");
+                exchangeOrder.setStatus("rejected");
+
+                jedis1.publish("report-message",
+                        exchangeOrder.toString() + " has been rejected by the exchange");
+
+                exchangeOrderService.persistToDb(exchangeOrder);
                 continue;
             }
+
+
             orderId = (orderId.subSequence(1, orderId.length() - 1)).toString();
 
             // updated order with string from exchange
@@ -44,12 +54,14 @@ public class OrderConsumer {
                     exchangeOrder.getPrice(), exchangeOrder.getSide(), exchangeOrder.getExchange(),1,"PENDING");
 
             // persist to database through rest call
-            ExchangeOrderService exchangeOrderService = new ExchangeOrderService();
             try {
                 exchangeOrderService.persistToDb(outgoingOrder);
             } catch (HttpClientErrorException e) {
-                // tell the reporting service the db said no
+                // tell the reporting service the db said no?
                 System.out.println("db");
+//                jedis1.publish("report-message",
+//                        exchangeOrder.toString() + " has been sent to the exchange & persisted into the db");
+
                 continue;
             }
 
