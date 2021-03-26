@@ -1,12 +1,13 @@
 package com.example.exchangeconnectivity.exchange;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
 public class ExchangeService {
 
-    public String confirmOrderWithExchange(ExchangeOrder exchangeOrder){
+    public String confirmOrderWithExchange(ExchangeOrder exchangeOrder) throws HttpStatusCodeException  {
         final String API_URL;
         final String privateKey = "6b055a2f-c488-4386-83b8-e9f30c773d35";
 
@@ -21,9 +22,9 @@ public class ExchangeService {
         }
 
         RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setErrorHandler(new ExchangeOrderServiceErrorHandler());
 
-        String result = restTemplate.postForObject(API_URL + "/" + privateKey + "/order", exchangeOrder, String.class);
-        return result;
+        return restTemplate.postForObject(API_URL + "/" + privateKey + "/order", exchangeOrder, String.class);
     }
 
 }

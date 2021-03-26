@@ -2,38 +2,35 @@ package com.example.exchangeconnectivity.exchange;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.web.client.ResponseErrorHandler;
+import org.springframework.web.client.*;
 
 import java.io.IOException;
 
 import static org.springframework.http.HttpStatus.Series.CLIENT_ERROR;
 import static org.springframework.http.HttpStatus.Series.SERVER_ERROR;
 
-public class ExchangeOrderServiceErrorHandler implements ResponseErrorHandler {
+public class ExchangeOrderServiceErrorHandler extends DefaultResponseErrorHandler {
 
     @Override
     public boolean hasError(ClientHttpResponse httpResponse)
             throws IOException {
 
-        return (
-                httpResponse.getStatusCode().series() == CLIENT_ERROR
-                        || httpResponse.getStatusCode().series() == SERVER_ERROR);
+        return new DefaultResponseErrorHandler().hasError(httpResponse);
     }
 
     @Override
-    public void handleError(ClientHttpResponse httpResponse)
+    public void handleError(ClientHttpResponse response)
             throws IOException {
-
-        if (httpResponse.getStatusCode()
-                .series() == HttpStatus.Series.SERVER_ERROR) {
-            System.out.println("server error");
-        } else if (httpResponse.getStatusCode()
-                .series() == HttpStatus.Series.CLIENT_ERROR) {
-            System.out.println(httpResponse.toString());
-            System.out.println("client error");
-            if (httpResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
-                System.out.println("not found");
-            }
+        HttpStatus statusCode = response.getStatusCode();
+        switch (statusCode.series()) {
+            case CLIENT_ERROR:
+                throw new HttpClientErrorException(statusCode, response.getStatusText(),
+                        response.getHeaders(), getResponseBody(response), getCharset(response));
+            case SERVER_ERROR:
+                throw new HttpServerErrorException(statusCode, response.getStatusText(),
+                        response.getHeaders(), getResponseBody(response), getCharset(response));
+            default:
+                throw new RestClientException("Unknown status code [" + statusCode + "]");
         }
     }
 }
