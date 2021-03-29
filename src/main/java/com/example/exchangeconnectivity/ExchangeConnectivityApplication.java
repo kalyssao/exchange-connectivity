@@ -8,23 +8,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @SpringBootApplication
-@EnableWebMvc
 @EnableScheduling
-public class ExchangeConnectivityApplication implements CommandLineRunner {
+public class ExchangeConnectivityApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ExchangeConnectivityApplication.class, args);
-	}
-
-	@Override
-	public void run(String ...arg0)throws Exception{
-		OrderConsumer orderConsumer = new OrderConsumer();
-
-		try {
-			orderConsumer.consumeOrder();
-		}catch (Exception e){
-			System.out.println(e);
-		}
 	}
 
 }
