@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.client.HttpClientErrorException;
 import redis.clients.jedis.Jedis;
 
@@ -14,6 +15,7 @@ public class OrderConsumer {
     String orderId;
     private List<String> orders;
 
+    @Scheduled(fixedDelay = 10000)
     public void consumeOrder() throws Exception {
         ExchangeOrderService exchangeOrderService = new ExchangeOrderService();
         jedis.auth("rLAKmB4fpXsRZEv9eJBkbddhTYc1RWtK");
