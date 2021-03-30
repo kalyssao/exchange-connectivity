@@ -23,7 +23,7 @@ public class OrderConsumer {
     }
 
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 500)
     public void consumeOrder() throws Exception {
         ExchangeOrderService exchangeOrderService = new ExchangeOrderService();
         jedisInit();
@@ -60,7 +60,6 @@ public class OrderConsumer {
 
 
         orderId = (orderId.subSequence(1, orderId.length() - 1)).toString();
-
         // updated order with string from exchange
         ExchangeOrder outgoingOrder = new ExchangeOrder(orderId,
                 exchangeOrder.getProduct(), exchangeOrder.getQuantity(),
