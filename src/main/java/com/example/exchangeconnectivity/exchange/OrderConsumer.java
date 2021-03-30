@@ -64,7 +64,7 @@ public class OrderConsumer {
         // updated order with string from exchange
         ExchangeOrder outgoingOrder = new ExchangeOrder(orderId,
                 exchangeOrder.getProduct(), exchangeOrder.getQuantity(),
-                exchangeOrder.getPrice(), exchangeOrder.getSide(), exchangeOrder.getExchange(),1,"PENDING");
+                exchangeOrder.getPrice(), exchangeOrder.getSide(), exchangeOrder.getExchange(),exchangeOrder.getClientOrderId(),"PENDING");
 
         // persist to database through rest call
         try {
